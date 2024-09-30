@@ -20,16 +20,23 @@ const useResource = (baseUrl) => {
 
   useEffect(() => {
     const getAll = async () => {
-      const response = await axios.get(baseUrl);
-      return response.data;
+      try {
+        const response = await axios.get(baseUrl);
+        setResources(response.data);
+      } catch (err) {
+        console.error('Failed to fetch resources', err);
+      }
     }
-    getAll()
-      .then(resource => setResources(resource));
+    getAll();
   }, [baseUrl]);
 
   const create = async (resource) => {
-    const response = await axios.post(baseUrl, resource);
-    setResources([...resources, response.data]);
+    try {
+      const response = await axios.post(baseUrl, resource);
+      setResources([...resources, response.data]);
+    } catch (err) {
+      console.error('Failed to create resources', err);
+    }
   }
 
   const service = {
